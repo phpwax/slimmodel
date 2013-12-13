@@ -1,0 +1,21 @@
+{
+    "name": "phpwax/slimmodel",
+    "type": "library",
+    "description": "PHP Wax Lightweight Model Compatibility",
+    "homepage": "http://php-wax.com",
+    "license": "MIT",
+    "authors": [
+        {"name": "Ross Riley","email": "ross@oneblackbear.com"},
+        {"name": "Charles Marshall","email": "charles@oneblackbear.com"}
+    ],
+    "require": {
+      "php": ">=5.4.0",
+      "doctrine/dbal": "2.5.*@dev"
+    },
+
+    "autoload": {
+      "psr-0": { "": "./" }
+    }
+
+
+}

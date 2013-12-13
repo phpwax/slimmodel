@@ -1,0 +1,14 @@
+<phpunit backupGlobals="true"
+         backupStaticAttributes="false"
+         bootstrap="Tests/bootstrap.php"
+         cacheTokens="false"
+         colors="true"
+         strict="false"
+         verbose="false">
+
+  <testsuites>
+    <testsuite name="Wax Slim Model Test Suite">
+      <directory>Tests/</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
