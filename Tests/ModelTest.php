@@ -12,10 +12,57 @@ class ModelTest extends \PHPUnit_Framework_TestCase {
     $this->db = DriverManager::getConnection($params);
   }
 
-  public function test_create_db() {
+  public function test_fails_without_connection() {
+    $this->setExpectedException('Wax\SlimModel\Model\ConnectionException');
+    $model = new MockModel();
+    $model->find(2);
+  }
+
+  public function test_fails_with_frozen_schema() {
     $this->setExpectedException('Doctrine\DBAL\DBALException');
     $model = new MockModel($this->db);
-    $res = $model->insert(["name"=>"test"]);
+    $model->freeze = true;
+    $res = $model->find(2);
+  }
+
+  public function test_creates_with_unfrozen_schema() {
+    $model = new MockModel($this->db);
+    $res = $model->find(2);
+    $this->assertEquals($res, null);
+  }
+
+  public function test_insert_and_find() {
+    $model = new MockModel($this->db);
+    $result = $model->insert(["title"=>"Hello World"]);
+    $this->assertEquals($result, 1);
+    $model2 = new MockModel($this->db);
+    $res = $model2->find(1);
+    $this->assertEquals($res["title"], "Hello World");
+  }
+
+  public function test_update() {
+    $model = new MockModel($this->db);
+    $result = $model->insert(["title"=>"Hello World"]);
+    $this->assertEquals($result, 1);
+    $model2 = new MockModel($this->db);
+    $result2 = $model2->update(1,["title"=>"Goodbye World"]);
+
+    $model3 = new MockModel($this->db);
+    $result3 = $model3->find(1);
+    $this->assertEquals($result3["title"], "Goodbye World");
+  }
+
+  public function test_delete() {
+    $model = new MockModel($this->db);
+    $result = $model->insert(["title"=>"Hello World"]);
+    $this->assertEquals($result, 1);
+    $model2 = new MockModel($this->db);
+    $result2 = $model2->delete(1);
+    $this->assertEquals($result2, 1);
+
+    $model3 = new MockModel($this->db);
+    $result3 = $model3->find(1);
+    $this->assertFalse($result3);
   }
 
 }

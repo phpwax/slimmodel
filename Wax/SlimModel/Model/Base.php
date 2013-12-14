@@ -1,6 +1,8 @@
 <?php
-
 namespace Wax\SlimModel\Model;
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\DBALException;
+
 
 class Base {
     protected $db;
@@ -8,8 +10,11 @@ class Base {
     protected $columns = [];
     protected $primary_key;
 
+    public    $freeze = false;
+
     public function __construct($db = false) {
       $this->setDB($db);
+      $this->setup();
     }
 
     public function setDB($db) {
@@ -20,35 +25,48 @@ class Base {
       $this->table = $table;
     }
 
+    public function setup(){}
+
+    /* The following methods all hit the database connection */
+
     public function all() {
-      $sql = "SELECT * FROM `$this->table`";
-      $result = $this->db->fetchAll($sql);
-      return $result;
+      return $this->execute(function(){
+        $sql = "SELECT * FROM `$this->table`";
+        $result = $this->db->fetchAll($sql);
+        return $result;
+      });
     }
 
     public function find($id) {
-      $sql = "SELECT * FROM `$this->table` WHERE `id` = ?";
-      $result = $this->db->fetchAssoc($sql, [$id]);
-      return $result;
+      return $this->execute(function() use($id){
+        $sql = "SELECT * FROM `$this->table` WHERE `$this->primary_key` = ?";
+        return $this->db->fetchAssoc($sql, [$id]);
+      });
     }
 
     public function delete($id) {
-      return $this->db->delete($this->table, ['id' => $id]);
+      return $this->execute(function() use($id){
+        return $this->db->delete($this->table, [$this->primary_key => $id]);
+      });
     }
 
     public function insert($params=[]) {
-      return $this->db->insert($this->table, $params);
+      return $this->execute(function() use($params){
+        return $this->db->insert($this->table, $params);
+      });
     }
 
     public function update($id, $params=[]) {
-      return $this->db->update($this->table, $params, ['id' => $id]);
+      return $this->execute(function() use($id, $params){
+        return $this->db->update($this->table, $params, [$this->primary_key => $id]);
+      });
     }
 
     public function define($name, $type="string", $options=[]) {
       $this->columns[$name] = ["type"=>$type, "options"=>$options];
     }
 
-    public function syncdb() {
+    protected function migrate() {
       /* Database preparation commands */
       $platform = $this->db->getDatabasePlatform();
       $sm = $this->db->getSchemaManager();
@@ -64,11 +82,34 @@ class Base {
         $table->addColumn($name,   $options["type"],  $options["options"]);
       }
 
-      $table->setPrimaryKey(array("id"));
+      $table->setPrimaryKey(array($this->primary_key));
       $queries = $schema->getMigrateFromSql($original_schema, $platform);
       foreach ($queries as $query) {
         $this->db->query($query);
       }
+    }
+
+    protected function execute($callable) {
+      if(!$this->db) throw new ConnectionException("No database Connection Specified", 1);
+      try {
+        $result = $callable();
+      } catch (DBALException $e) {
+        if($this->freeze) throw $e;
+        $exception = $e->getPrevious();
+        $error = $exception->errorInfo;
+        switch($error[0]) {
+          case "HY000":
+            try {
+              $this->migrate();
+              $result = $callable();
+            } catch (Exception $e) {
+              throw new SchemaException("Invalid Schema", 1);
+            }
+          break;
+
+        }
+      }
+      return $result;
     }
 
 
