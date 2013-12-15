@@ -57,7 +57,7 @@ class ModelTest extends \PHPUnit_Framework_TestCase {
     $result = $model->insert(["title"=>"Hello World"]);
     $this->assertEquals($result, 1);
     $model2 = new MockModel($this->db);
-    $result2 = $model2->delete(1);
+    $result2 = $model2->delete(["id"=>1]);
     $this->assertEquals($result2, 1);
 
     $model3 = new MockModel($this->db);

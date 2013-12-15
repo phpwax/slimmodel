@@ -7,8 +7,8 @@ use Doctrine\DBAL\DBALException;
 class Base {
     protected $db;
     protected $table;
-    protected $columns = [];
-    protected $primary_key;
+    protected $columns      = [];
+    protected $primary_key  = "id";
 
     public    $freeze = false;
 
@@ -44,9 +44,9 @@ class Base {
       });
     }
 
-    public function delete($id) {
-      return $this->execute(function() use($id){
-        return $this->db->delete($this->table, [$this->primary_key => $id]);
+    public function delete($filters) {
+      return $this->execute(function() use($filters){
+        return $this->db->delete($this->table, $filters);
       });
     }
 
