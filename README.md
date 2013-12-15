@@ -89,10 +89,10 @@ Joins and advanced filters can be created by using the functionality in Querybui
     $url = "/content/an-example-page";
     $query = $db_connection->createQueryBuilder();
     $query->select("*")
-          ->from("wildfire_url_map","tu")
-          ->leftjoin("tu", "wildfire_content", "tc", "tu.destination_id = tc.id")
-          ->where("tu.origin_url = :url")
-          ->andwhere("tu.status = 1")
+          ->from("wildfire_url_map","u")
+          ->leftjoin("u", "wildfire_content", "c", "u.destination_id = c.id")
+          ->where("u.origin_url = :url")
+          ->andwhere("u.status = 1")
           ->setParameter("url","/".$url);
     $result = $query->execute()->fetch();
 
