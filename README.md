@@ -10,6 +10,14 @@ and fields. Instead, everything is a plain PHP object.
 
 ### What Slim-Model Can Do
 
+#### Automatic Databaase Syncing
+
+In development mode, Slim-model continues to automaticall sync the database to columns defined in the `define()` method.
+Model objects can also be set to frozen when this behaviour is no longer required.
+
+As before the sync will be triggered automatically whenever a query cannot run because of a schema exception.
+
+
 #### Model construction, passing in a connection
 
 First up you need to create a new model that extends `Wax\SlimModel\Model\Base`
