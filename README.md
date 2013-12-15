@@ -114,6 +114,9 @@ http://www.doctrine-project.org/api/dbal/2.4/namespace-Doctrine.DBAL.Types.html
 
 
 
+## How to install
+
+Via composer, just add the following to any project's `composer.json` file.
 
 
 
