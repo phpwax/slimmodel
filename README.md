@@ -130,3 +130,19 @@ Then define your models to extend the Base class, like below..
     class Example extends Base {........}
 
 
+## Run tests.
+
+Run the unit tests to ensure compliance with API. Clone the repo then run...
+
+    composer update
+
+This will put the necessary dependencies in the vendor directory.
+
+Then ensure that phpunit is in your path. If not you'll need to install it.
+
+Go into the root of the project directory and run:
+
+    phpunit
+
+Hopefully you'll see a nice green bar.
+
