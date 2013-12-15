@@ -96,6 +96,14 @@ Joins and advanced filters can be created by using the functionality in Querybui
           ->setParameter("url","/".$url);
     $result = $query->execute()->fetch();
 
+### Notes on field types for defines.
+
+Note that these are not compatible with older style field definitions such as `CharField`, `IntegerField` etc.
+
+All Doctrine DBAL types are available including guid (YAY!), so check the api docs for details at:
+
+http://www.doctrine-project.org/api/dbal/2.4/namespace-Doctrine.DBAL.Types.html
+
 
 
 
