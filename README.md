@@ -118,6 +118,15 @@ http://www.doctrine-project.org/api/dbal/2.4/namespace-Doctrine.DBAL.Types.html
 
 Via composer, just add the following to any project's `composer.json` file.
 
+    "require": {
+      "phpwax/slimmodel": "1.0.*@dev"
+    }
 
+Then define your models to extend the Base class, like below..
+
+    <?php
+    use Wax\SlimModel\Model\Base;
+
+    class Example extends Base {........}
 
 
