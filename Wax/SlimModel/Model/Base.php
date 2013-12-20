@@ -27,6 +27,18 @@ class Base {
 
     public function setup(){}
 
+    public function add_include($type, $options = []) {
+      if(!isset($options["table"])) throw new \InvalidArgumentException("Table must be specified in an include");
+      if(!isset($options["join"])) $options["join"] = $this->table."_".$options["table"];
+      if(!isset($options["key"])) $options["key"] = "id";
+      if(!isset($options["join_key"])) $options["join_key"] = "id";
+      if(!isset($options["as"])) $options["as"] = $options["table"];
+      if(!isset($options["join_left_key"])) $options["join_left_key"] = $this->table."_id";
+      if(!isset($options["join_right_key"])) $options["join_right_key"] = $options["table"]."_id";
+      $options["origin"] = $this->table;
+      $this->includes[$type][] = $options;
+    }
+
     /* The following methods all hit the database connection */
 
     public function all() {
@@ -109,8 +121,42 @@ class Base {
 
         }
       }
-      return $result;
+      return $this->post_process($result);
     }
+
+  protected function post_process($resultset) {
+    if(!$this->includes) return $resultset;
+    foreach($this->includes["many"] as $inc) {
+      $resultset = $this->include_many($resultset, $inc);
+    }
+    return $resultset;
+  }
+
+  protected function include_many($resultset, $options) {
+    foreach($resultset as $res) {
+      $index[]= $res[$options["key"]];
+    }
+    $jq = $this->db->createQueryBuilder();
+    $jq->select("l.id as lkey, r.*")
+       ->from($options["origin"],"l")
+       ->leftjoin("l", $options["join"], "j", "j.{$options['join_left_key']} = l.{$options['key']}")
+       ->leftjoin("l", $options["table"],"r", "r.{$options['join_key']} = j.{$options['join_right_key']}")
+       ->where($jq->expr()->in("l.{$options['key']}", $index))
+       ->andwhere("r.{$options['join_key']} IS NOT NULL");
+    $joins = $jq->execute()->fetchAll();
+    array_walk($resultset, function(&$value, $key, $params){
+      $options = $params["options"];
+      foreach($params["joins"] as $row) {
+        if($row["lkey"]==$value[$options["key"]]) {
+          unset($row["lkey"]);
+          $value[$options["as"]][] = $row;
+        }
+      }
+    },["joins"=>$joins,"options"=>$options]);
+    return $resultset;
+  }
+
+
 
 
 }
