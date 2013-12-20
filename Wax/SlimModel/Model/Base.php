@@ -136,6 +136,7 @@ class Base {
   }
 
   protected function include_many($resultset, $options) {
+    if(!is_array($resultset)) return $resultset;
     foreach($resultset as $res) {
       $index[]= $res[$options["key"]];
     }
