@@ -11,6 +11,7 @@ class Base {
     protected $primary_key  = "id";
 
     public    $freeze = false;
+    public    $includes = false;
 
     public function __construct($db = false) {
       $this->setDB($db);
@@ -127,6 +128,7 @@ class Base {
   protected function post_process($resultset) {
     if(!$this->includes) return $resultset;
     if(!count($resultset)) return $resultset;
+    if(!isset($this->includes["many"])) return $resultset;
     foreach($this->includes["many"] as $inc) {
       $resultset = $this->include_many($resultset, $inc);
     }
