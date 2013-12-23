@@ -2,6 +2,8 @@
 namespace Wax\SlimModel\Model;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\DBALException;
+use Doctrine\Common\EventManager;
+
 
 
 class Base {
@@ -9,13 +11,15 @@ class Base {
     protected $table;
     protected $columns      = [];
     protected $primary_key  = "id";
+    protected $events;
 
     public    $freeze = false;
     public    $includes = false;
 
-    public function __construct($db = false) {
+    public function __construct($db = false, EventManager $eventManager = null) {
       $this->setDB($db);
       $this->setup();
+      if(!$eventManager) $this->events = new EventManager();
     }
 
     public function setDB($db) {

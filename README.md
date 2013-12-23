@@ -17,6 +17,40 @@ Model objects can also be set to frozen when this behaviour is no longer require
 
 As before the sync will be triggered automatically whenever a query cannot run because of a schema exception.
 
+## How to install
+
+Via composer, just add the following to any project's `composer.json` file.
+
+    "require": {
+      "phpwax/slimmodel": "1.0.*@dev"
+    }
+
+Then define your models to extend the Base class, like below..
+
+    <?php
+    use Wax\SlimModel\Model\Base;
+
+    class Example extends Base {........}
+
+
+## Run tests.
+
+Run the unit tests to ensure compliance with API. Clone the repo then run...
+
+    composer update
+
+This will put the necessary dependencies in the vendor directory.
+
+Then ensure that phpunit is in your path. If not you'll need to install it.
+
+Go into the root of the project directory and run:
+
+    phpunit
+
+Hopefully you'll see a nice green bar.
+
+## Getting Started and Basic Usage
+
 
 #### Model construction, passing in a connection
 
@@ -90,7 +124,7 @@ And then make a query like below:
 
 Magic.
 
-Data is returned as simple objects. If you need anything more complicated then write helper methods to transform.
+Data is returned as simple data. If you need anything more complicated then write helper methods to transform.
 
 Joins and advanced filters can be created by using the functionality in Querybuilder. For example here's a query that mimics a CMS style router.
 
@@ -114,35 +148,24 @@ http://www.doctrine-project.org/api/dbal/2.4/namespace-Doctrine.DBAL.Types.html
 
 
 
-## How to install
+## Including join data
 
-Via composer, just add the following to any project's `composer.json` file.
+Slim model can eager load and include joined data by way of the `includes` functionality. *NOTE:* This is primarily for use as a helper when your use case is simple. If you need to do anything complex, such as ordering on the join table or filtering of the join query this is not supported, but in these cases it's best to used the querybuilder to optimise your performance.
 
-    "require": {
-      "phpwax/slimmodel": "1.0.*@dev"
-    }
+### An example, joining images to content
 
-Then define your models to extend the Base class, like below..
+First we need to use our content model to define an include. This will look like the following.
 
-    <?php
     use Wax\SlimModel\Model\Base;
 
-    class Example extends Base {........}
+
+    class Content extends Base {
+      protected $table = "wildfire_content";
 
 
-## Run tests.
+      public function setup() {
+        $this->add_include("many", ["table"=>"wildfire_media","as"=>"images"]);
+      }
+    }
 
-Run the unit tests to ensure compliance with API. Clone the repo then run...
-
-    composer update
-
-This will put the necessary dependencies in the vendor directory.
-
-Then ensure that phpunit is in your path. If not you'll need to install it.
-
-Go into the root of the project directory and run:
-
-    phpunit
-
-Hopefully you'll see a nice green bar.
 
