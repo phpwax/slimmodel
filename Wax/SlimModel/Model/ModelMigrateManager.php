@@ -32,7 +32,7 @@ class ModelMigrateManager implements EventSubscriber {
     else $this->migrate($event->model);
   }
 
-  protected function migrate($model) {
+  public function migrate($model) {
     /* Initialise the schema variables from the connection */
     $platform = $model->db->getDatabasePlatform();
     $sm = $model->db->getSchemaManager();
@@ -57,5 +57,6 @@ class ModelMigrateManager implements EventSubscriber {
       $model->db->query($query);
     }
   }
+
 
 }

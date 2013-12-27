@@ -34,6 +34,7 @@ class IncludeManyQuery {
   }
 
   public function execute() {
+    $this->build();
     return $this->query->execute()->fetchAll();
   }
 
