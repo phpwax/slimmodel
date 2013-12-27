@@ -2,9 +2,8 @@
 namespace Wax\SlimModel\Tests;
 use Wax\SlimModel\Model\Base;
 
-class MockModel extends Base {
-  public $table        = "example";
-  public $primary_key  = "id";
+class MockIncludeModel extends Base {
+  protected $table        = "jointable";
 
   public function setup() {
     $this->define("id",   "integer",  ["autoincrement"=>true]);
