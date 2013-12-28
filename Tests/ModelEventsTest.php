@@ -52,14 +52,14 @@ class ModelEventsTest extends \PHPUnit_Framework_TestCase {
   public function test_post_fetch_invoked() {
     $model = new MockModel($this->db);
     $mock_subscriber = $this->getMockBuilder('Doctrine\Common\EventSubscriber')
-                          ->setMethods(["postFetch","getSubscribedEvents"])
+                          ->setMethods(["preFetch","getSubscribedEvents"])
                           ->getMock();
     $mock_subscriber->expects($this->any())
                     ->method('getSubscribedEvents')
-                    ->will($this->returnCallback(function(){return ["postFetch"];}));
+                    ->will($this->returnCallback(function(){return ["preFetch"];}));
 
     $mock_subscriber->expects($this->once())
-                    ->method('postFetch');
+                    ->method('preFetch');
 
     $model->events->addEventSubscriber($mock_subscriber);
     $model->find(1);
