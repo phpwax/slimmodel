@@ -11,21 +11,21 @@ class ModelEventsTest extends \PHPUnit_Framework_TestCase {
   public function setup() {
     $params = ['driver' => 'pdo_sqlite','memory' => true];
     $this->db = DriverManager::getConnection($params);
+
   }
 
   public function test_include_manager_trigger() {
-    $setup = new MockModel($this->db);
-    $setup->insert(["title"=>"Hello World"]);
-
     $model = new MockModel($this->db);
     $model->add_include("many", ["table"=>"jointable"]);
 
     $mock_includer = $this->getMockBuilder('Wax\SlimModel\Model\IncludeManager')
                           ->setMethods(["postFetch"])
                           ->getMock();
+
     $mock_includer->expects($this->once())
                   ->method('postFetch')
                   ->with($this->isInstanceOf("Wax\SlimModel\Model\ModelEventArgs"));
+
     $model->includeManager = $mock_includer;
     $model->find(1);
 
@@ -35,9 +35,11 @@ class ModelEventsTest extends \PHPUnit_Framework_TestCase {
     $this->setExpectedException('Doctrine\DBAL\DBALException');
 
     $model = new MockModel($this->db);
+
     $mock_migrator = $this->getMockBuilder('Wax\SlimModel\Model\MigrateManager')
                           ->setMethods(["onSchemaException"])
                           ->getMock();
+
     $mock_migrator->expects($this->once())
                   ->method('onSchemaException')
                   ->with($this->isInstanceOf("Wax\SlimModel\Model\ModelEventArgs")) ;
@@ -45,6 +47,22 @@ class ModelEventsTest extends \PHPUnit_Framework_TestCase {
     $model->migrateManager = $mock_migrator;
     $model->insert(["title"=>"Hello World"]);
 
+  }
+
+  public function test_post_fetch_invoked() {
+    $model = new MockModel($this->db);
+    $mock_subscriber = $this->getMockBuilder('Doctrine\Common\EventSubscriber')
+                          ->setMethods(["postFetch","getSubscribedEvents"])
+                          ->getMock();
+    $mock_subscriber->expects($this->any())
+                    ->method('getSubscribedEvents')
+                    ->will($this->returnCallback(function(){return ["postFetch"];}));
+
+    $mock_subscriber->expects($this->once())
+                    ->method('postFetch');
+
+    $model->events->addEventSubscriber($mock_subscriber);
+    $model->find(1);
   }
 
 

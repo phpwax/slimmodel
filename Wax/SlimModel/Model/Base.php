@@ -11,7 +11,7 @@ class Base {
     public $table;
     public $columns      = [];
     public $primary_key  = "id";
-    protected $events;
+    public $events;
 
     public $includeManager  = false;
     public $migrateManager  = false;
