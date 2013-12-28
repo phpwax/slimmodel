@@ -13,25 +13,20 @@ class Base {
     public $primary_key  = "id";
     protected $events;
 
-    public $includeManager = false;
-    public $migrateManager = false;
+    public $includeManager  = false;
+    public $migrateManager  = false;
     public $freeze          = false;
     public $includes        = false;
     public $result          = false;
 
     public function __construct($db = false, EventManager $eventManager = null) {
-      $this->setDB($db);
+      $this->db = $db;
       $this->setup();
       if(!$eventManager) $this->events = new EventManager();
+      $this->includeManager = new IncludeManager($this);
+      $this->migrateManager = new MigrateManager($this);
     }
 
-    public function setDB($db) {
-        $this->db = $db;
-    }
-
-    public function setTable($table) {
-      $this->table = $table;
-    }
 
     public function setup(){}
 
@@ -50,11 +45,8 @@ class Base {
 
     /* This ensures the auto-included managers are available. */
     public function initManagers() {
-      if(!$this->includeManager) $this->includeManager = new ModelIncludeManager($this);
-      $this->events->addEventSubscriber($this->includeManager);
-
-      if(!$this->migrateManager) $this->migrateManager = new ModelMigrateManager($this);
-      $this->events->addEventSubscriber($this->migrateManager);
+      if($this->includeManager) $this->events->addEventSubscriber($this->includeManager);
+      if($this->migrateManager) $this->events->addEventSubscriber($this->migrateManager);
     }
 
 
@@ -72,10 +64,6 @@ class Base {
       $this->includes[$type][] = $options;
     }
 
-
-    public function setIncludeManager(EventSubscriber $manager) {
-      $this->include_manager = $manager;
-    }
 
     public function getManyIncludes() {
       if(isset($this->includes) && count($this->includes["many"])) {
