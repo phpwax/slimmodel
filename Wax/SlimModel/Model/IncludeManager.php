@@ -32,7 +32,7 @@ class IncludeManager implements EventSubscriber {
 
   private function include_many($options) {
     $model_indices = [];
-    foreach((array)$this->model->result as $res) {
+    foreach($this->model->result as $res) {
       $model_indices[]= $res[$options["key"]];
     }
     $query = new IncludeManyQuery($this->model->db, $options, $model_indices);
@@ -41,7 +41,7 @@ class IncludeManager implements EventSubscriber {
   }
 
   private function fill_data($joins, $options) {
-    array_walk((array)$this->model->result, function(&$value, $key, $params){
+    array_walk($this->model->result, function(&$value, $key, $params){
       $options = $params["options"];
       foreach($params["joins"] as $row) {
         if($row["lkey"]==$value[$options["key"]]) {
