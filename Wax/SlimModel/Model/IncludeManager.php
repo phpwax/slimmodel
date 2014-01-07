@@ -41,7 +41,7 @@ class IncludeManager implements EventSubscriber {
   }
 
   private function fill_data($joins, $options) {
-    array_walk($this->model->result, function(&$value, $key, $params){
+    array_walk((array)$this->model->result, function(&$value, $key, $params){
       $options = $params["options"];
       foreach($params["joins"] as $row) {
         if($row["lkey"]==$value[$options["key"]]) {
