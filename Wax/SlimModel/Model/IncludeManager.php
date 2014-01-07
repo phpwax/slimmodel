@@ -32,7 +32,7 @@ class IncludeManager implements EventSubscriber {
 
   private function include_many($options) {
     $model_indices = [];
-    foreach($this->model->result as $res) {
+    foreach((array)$this->model->result as $res) {
       $model_indices[]= $res[$options["key"]];
     }
     $query = new IncludeManyQuery($this->model->db, $options, $model_indices);
