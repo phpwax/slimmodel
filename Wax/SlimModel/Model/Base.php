@@ -38,6 +38,11 @@ class Base {
       return $this->result;
     }
 
+    public function first() {
+      if(is_array($this->result)) return $this->result[0];
+      return false;
+    }
+
     protected function setResult($result) {
       $this->result = $result;
     }
