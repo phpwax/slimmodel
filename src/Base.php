@@ -1,12 +1,18 @@
 <?php
 namespace SlimModel;
+
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\DBALException;
 use Doctrine\Common\EventManager;
 
+use SlimModel\Event\IncludeManager;
+use SlimModel\Event\MigrateManager;
+use SlimModel\Event\ModelEventArgs;
 
 
-class Base {
+class Base
+{
+
     public $db;
     public $table;
     public $columns      = [];

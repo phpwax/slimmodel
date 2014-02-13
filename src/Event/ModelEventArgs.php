@@ -1,5 +1,5 @@
 <?php
-namespace SlimModel;
+namespace SlimModel\Event;
 
 use Doctrine\Common\EventArgs;
 

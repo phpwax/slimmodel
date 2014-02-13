@@ -1,5 +1,5 @@
 <?php
-namespace SlimModel;
+namespace SlimModel\Event;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Common\EventSubscriber;
@@ -11,7 +11,7 @@ use Doctrine\Common\EventSubscriber;
  * Note, in theory this happens in development only, activation is triggered by the `freeze` attribute on the model.
  *
  */
-class ModelMigrateManager implements EventSubscriber {
+class MigrateManager implements EventSubscriber {
 
   protected $model;
   protected $event_data;

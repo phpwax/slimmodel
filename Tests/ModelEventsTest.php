@@ -2,7 +2,7 @@
 namespace SlimModel\Tests;
 
 use Doctrine\DBAL\DriverManager;
-use SlimModel\IncludeManager;
+use SlimModel\Event\IncludeManager;
 use SlimModel\Tests\Fixtures\MockModel;
 
 
@@ -20,13 +20,13 @@ class ModelEventsTest extends \PHPUnit_Framework_TestCase {
     $model = new MockModel($this->db);
     $model->add_include("many", ["table"=>"jointable"]);
 
-    $mock_includer = $this->getMockBuilder('SlimModel\IncludeManager')
+    $mock_includer = $this->getMockBuilder('SlimModel\Event\IncludeManager')
                           ->setMethods(["postFetch"])
                           ->getMock();
 
     $mock_includer->expects($this->once())
                   ->method('postFetch')
-                  ->with($this->isInstanceOf("SlimModel\ModelEventArgs"));
+                  ->with($this->isInstanceOf("SlimModel\Event\ModelEventArgs"));
 
     $model->includeManager = $mock_includer;
     $model->find(1);
@@ -38,13 +38,13 @@ class ModelEventsTest extends \PHPUnit_Framework_TestCase {
 
     $model = new MockModel($this->db);
 
-    $mock_migrator = $this->getMockBuilder('SlimModel\MigrateManager')
+    $mock_migrator = $this->getMockBuilder('SlimModel\Event\MigrateManager')
                           ->setMethods(["onSchemaException"])
                           ->getMock();
 
     $mock_migrator->expects($this->once())
                   ->method('onSchemaException')
-                  ->with($this->isInstanceOf("SlimModel\ModelEventArgs")) ;
+                  ->with($this->isInstanceOf("SlimModel\Event\ModelEventArgs")) ;
 
     $model->migrateManager = $mock_migrator;
     $model->insert(["title"=>"Hello World"]);
