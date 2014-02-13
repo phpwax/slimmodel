@@ -1,7 +1,7 @@
 <?php
 namespace SlimModel;
 
-
-class SchemaException extends \Exception {
+class SchemaException extends \Exception
+{
 
 }
