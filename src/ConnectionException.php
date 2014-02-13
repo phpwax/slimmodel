@@ -1,5 +1,5 @@
 <?php
-namespace Wax\SlimModel\Model;
+namespace SlimModel;
 
 
 class ConnectionException extends \Exception {

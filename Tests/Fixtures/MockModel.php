@@ -1,6 +1,7 @@
 <?php
-namespace Wax\SlimModel\Tests;
-use Wax\SlimModel\Model\Base;
+namespace SlimModel\Tests\Fixtures;
+
+use SlimModel\Base;
 
 class MockModel extends Base {
   public $table        = "example";

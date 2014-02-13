@@ -1,6 +1,6 @@
 <?php
 
-namespace Wax\SlimModel\Model;
+namespace SlimModel\Query;
 
 /**
  * Supplied with a set of options and a DBAL connection this class builds a query to include data.

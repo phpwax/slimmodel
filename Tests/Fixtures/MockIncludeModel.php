@@ -1,6 +1,7 @@
 <?php
-namespace Wax\SlimModel\Tests;
-use Wax\SlimModel\Model\Base;
+namespace SlimModel\Tests;
+
+use SlimModel\Base;
 
 class MockIncludeModel extends Base {
   protected $table        = "jointable";

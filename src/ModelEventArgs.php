@@ -1,5 +1,6 @@
 <?php
-namespace Wax\SlimModel\Model;
+namespace SlimModel;
+
 use Doctrine\Common\EventArgs;
 
 /**

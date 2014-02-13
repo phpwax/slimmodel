@@ -1,5 +1,5 @@
 <?php
-namespace Wax\SlimModel\Model;
+namespace SlimModel\Query;
 
 
 class QueryException extends \Exception {

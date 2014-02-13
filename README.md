@@ -1,18 +1,18 @@
 ## Slim-Model
 
-### A lighter version of WaxModel
+### A lighter ORM style wrapper for Doctrine DBAL
 
-Boasting a similar feature set to the original Wax Database component, Slim-Model is ruthlessly small, whilst keeping
+Slim-Model is a small library that wraps Doctrine DBAL allowing fast prototypes , whilst keeping
 many of the features of the original gargantuan library.
 
 This package delegates all the heavy lifting to Doctrine/DBAL and throws out the concept of complex objects for models
-and fields. Instead, everything is a plain PHP object.
+and fields. Instead, everything returned is a plain PHP object.
 
 ### What Slim-Model Can Do
 
 #### Automatic Databaase Syncing
 
-In development mode, Slim-model continues to automaticall sync the database to columns defined in the `define()` method.
+In development mode, Slim-model can automatically sync the database to columns defined in the `define()` method.
 Model objects can also be set to frozen when this behaviour is no longer required.
 
 As before the sync will be triggered automatically whenever a query cannot run because of a schema exception.
@@ -22,13 +22,13 @@ As before the sync will be triggered automatically whenever a query cannot run b
 Via composer, just add the following to any project's `composer.json` file.
 
     "require": {
-      "phpwax/slimmodel": "1.0.*@dev"
+      "rossriley/slimmodel": "1.0.*@dev"
     }
 
 Then define your models to extend the Base class, like below..
 
     <?php
-    use Wax\SlimModel\Model\Base;
+    use SlimModel\Base;
 
     class Example extends Base {........}
 
@@ -54,12 +54,12 @@ Hopefully you'll see a nice green bar.
 
 #### Model construction, passing in a connection
 
-First up you need to create a new model that extends `Wax\SlimModel\Model\Base`
+First up you need to create a new model that extends `SlimModel\Base`
 
 It will look something like the below...
 
     ....
-    use Wax\SlimModel\Model\Base;
+    use SlimModel\Base;
 
     class Example extends Base {
       protected $table        = "example";
@@ -126,23 +126,12 @@ Magic.
 
 Data is returned as simple data. If you need anything more complicated then write helper methods to transform.
 
-Joins and advanced filters can be created by using the functionality in Querybuilder. For example here's a query that mimics a CMS style router.
+Joins and advanced filters can be created by using the functionality in Querybuilder.
 
-    $url = "/content/an-example-page";
-    $query = $db_connection->createQueryBuilder();
-    $query->select("*")
-          ->from("wildfire_url_map","u")
-          ->leftjoin("u", "wildfire_content", "c", "u.destination_id = c.id")
-          ->where("u.origin_url = :url")
-          ->andwhere("u.status = 1")
-          ->setParameter("url","/".$url);
-    $result = $query->execute()->fetch();
 
 ### Notes on field types for defines.
 
-Note that these are not compatible with older style field definitions such as `CharField`, `IntegerField` etc.
-
-All Doctrine DBAL types are available including guid (YAY!), so check the api docs for details at:
+All Doctrine DBAL types are available including guid, so check the api docs for details at:
 
 http://www.doctrine-project.org/api/dbal/2.4/namespace-Doctrine.DBAL.Types.html
 
@@ -156,7 +145,7 @@ Slim model can eager load and include joined data by way of the `includes` funct
 
 First we need to use our content model to define an include. This will look like the following.
 
-    use Wax\SlimModel\Model\Base;
+    use SlimModel\Base;
 
 
     class Content extends Base {
@@ -164,7 +153,7 @@ First we need to use our content model to define an include. This will look like
 
 
       public function setup() {
-        $this->add_include("many", ["table"=>"wildfire_media","as"=>"images"]);
+        $this->add_include("many", ["table"=>"media","as"=>"images"]);
       }
     }
 

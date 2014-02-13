@@ -1,12 +1,14 @@
 {
-    "name": "phpwax/slimmodel",
+    "name": "rossriley/slimmodel",
     "type": "library",
-    "description": "PHP Wax Lightweight Model Compatibility",
-    "homepage": "http://php-wax.com",
+    "description": "Lightweight Model Package",
+    "homepage": "http://github.com/rossriley/slimmodel",
     "license": "MIT",
     "authors": [
-        {"name": "Ross Riley","email": "ross@oneblackbear.com"},
-        {"name": "Charles Marshall","email": "charles@oneblackbear.com"}
+        {
+            "name": "Ross Riley",
+            "email": "riley.ross@gmail.com"
+        }
     ],
     "require": {
       "php": ">=5.4.0",
@@ -14,7 +16,10 @@
     },
 
     "autoload": {
-      "psr-0": { "": "./" }
+        "psr-4": {
+            "SlimModel\\": "src",
+            "SlimModel\\Tests\\": "tests"
+        }
     },
 
     "extra": {

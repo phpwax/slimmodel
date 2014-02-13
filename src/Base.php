@@ -1,5 +1,5 @@
 <?php
-namespace Wax\SlimModel\Model;
+namespace SlimModel;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\DBALException;
 use Doctrine\Common\EventManager;

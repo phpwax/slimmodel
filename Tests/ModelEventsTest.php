@@ -1,7 +1,9 @@
 <?php
-namespace Wax\SlimModel\Tests;
+namespace SlimModel\Tests;
+
 use Doctrine\DBAL\DriverManager;
-use Wax\SlimModel\Model\IncludeManager;
+use SlimModel\IncludeManager;
+use SlimModel\Tests\Fixtures\MockModel;
 
 
 class ModelEventsTest extends \PHPUnit_Framework_TestCase {
@@ -18,13 +20,13 @@ class ModelEventsTest extends \PHPUnit_Framework_TestCase {
     $model = new MockModel($this->db);
     $model->add_include("many", ["table"=>"jointable"]);
 
-    $mock_includer = $this->getMockBuilder('Wax\SlimModel\Model\IncludeManager')
+    $mock_includer = $this->getMockBuilder('SlimModel\IncludeManager')
                           ->setMethods(["postFetch"])
                           ->getMock();
 
     $mock_includer->expects($this->once())
                   ->method('postFetch')
-                  ->with($this->isInstanceOf("Wax\SlimModel\Model\ModelEventArgs"));
+                  ->with($this->isInstanceOf("SlimModel\ModelEventArgs"));
 
     $model->includeManager = $mock_includer;
     $model->find(1);
@@ -36,13 +38,13 @@ class ModelEventsTest extends \PHPUnit_Framework_TestCase {
 
     $model = new MockModel($this->db);
 
-    $mock_migrator = $this->getMockBuilder('Wax\SlimModel\Model\MigrateManager')
+    $mock_migrator = $this->getMockBuilder('SlimModel\MigrateManager')
                           ->setMethods(["onSchemaException"])
                           ->getMock();
 
     $mock_migrator->expects($this->once())
                   ->method('onSchemaException')
-                  ->with($this->isInstanceOf("Wax\SlimModel\Model\ModelEventArgs")) ;
+                  ->with($this->isInstanceOf("SlimModel\ModelEventArgs")) ;
 
     $model->migrateManager = $mock_migrator;
     $model->insert(["title"=>"Hello World"]);

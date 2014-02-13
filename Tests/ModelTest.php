@@ -1,7 +1,8 @@
 <?php
-namespace Wax\SlimModel\Tests;
-use Doctrine\DBAL\DriverManager;
+namespace SlimModel\Tests;
 
+use Doctrine\DBAL\DriverManager;
+use SlimModel\Tests\Fixtures\MockModel;
 
 class ModelTest extends \PHPUnit_Framework_TestCase {
 
@@ -13,7 +14,7 @@ class ModelTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function test_fails_without_connection() {
-    $this->setExpectedException('Wax\SlimModel\Model\ConnectionException');
+    $this->setExpectedException('SlimModel\ConnectionException');
     $model = new MockModel();
     $model->find(2);
   }

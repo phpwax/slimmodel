@@ -1,8 +1,9 @@
 <?php
-namespace Wax\SlimModel\Tests;
-use Doctrine\DBAL\DriverManager;
-use Wax\SlimModel\Model\IncludeManyQuery;
+namespace SlimModel\Tests;
 
+use Doctrine\DBAL\DriverManager;
+use SlimModel\Query\IncludeManyQuery;
+use SlimModel\Tests\Fixtures\MockModel;
 
 class ModelIncludeTest extends \PHPUnit_Framework_TestCase {
 

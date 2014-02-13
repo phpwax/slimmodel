@@ -1,13 +1,14 @@
 <?php
+namespace SlimModel;
 
-namespace Wax\SlimModel\Model;
 use Doctrine\Common\EventSubscriber;
+use SlimModel\Query\IncludeManyQuery;
 
 /**
  * Hooks onto Model Events which is used to perform modifications on resultsets.
  *
  */
-class ModelIncludeManager implements EventSubscriber {
+class IncludeManager implements EventSubscriber {
 
   protected $model = false;
 

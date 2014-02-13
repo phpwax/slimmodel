@@ -7,7 +7,7 @@
          verbose="false">
 
   <testsuites>
-    <testsuite name="Wax Slim Model Test Suite">
+    <testsuite name="SlimModel Test Suite">
       <directory>Tests/</directory>
     </testsuite>
   </testsuites>
