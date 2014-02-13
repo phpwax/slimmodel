@@ -6,9 +6,16 @@
          strict="false"
          verbose="false">
 
+  <filter>
+
+    <blacklist>
+      <directory suffix=".php">./vendor</directory>
+    </blacklist>
+  </filter>
+
   <testsuites>
     <testsuite name="SlimModel Test Suite">
-      <directory>Tests/</directory>
+      <directory>tests/</directory>
     </testsuite>
   </testsuites>
 </phpunit>
